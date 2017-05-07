@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+  server:
+    image: shipperizer/solid-enigma
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: make server
+    environment:
+      - RABBITMQ_USER=rabbit
+      - RABBITMQ_PASSWORD=rabbit
+      - RABBITMQ_HOST=rabbitmq
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_HOST=postgres
+      - DB_NAME=blackjack
+    depends_on:
+      - rabbitmq
+      - postgres
+    ports:
+      - 8888
+    volumes:
+      - ./:/var/app
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - 15672:15672
+    hostname: rabbit
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit
+      - RABBITMQ_DEFAULT_PASS=rabbit
+
+  postgres:
+    image: postgres:9.5.2
+    ports:
+      - 15432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=blackjack
+    restart: always
