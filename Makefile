@@ -13,5 +13,4 @@ migrate:
 	alembic upgrade head
 
 test:
-	DB_NAME=test alembic upgrade head
-	DB_NAME=test py.test test_blackjack.py
+	py.test test_blackjack.py
